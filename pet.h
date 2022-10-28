@@ -83,9 +83,9 @@ public:
 Animal::Animal() {
   Name = "";
   age = 0; //empezar desde 0
-  hunger = 10;
+  hunger = 13;
   health= 10;
-  attention = 10;
+  attention = 15;
   maxStatus = 20;
 }
 
@@ -226,7 +226,7 @@ void Animal::menuDisplay(){
 } 
 void Animal::menuFeed(){
   cout<<"---------------| Feed Pet |---------------"<<endl;
-  cout<<"\t-> Choose one of the follwoing options to feed pet <-"<<endl;
+  cout<<"      -> Choose one of the following options to feed pet <-"<<endl;
   cout<<"\t-> (1) Treats"<<endl;
   cout<<"\t-> (2) Kibbles"<<endl;
   cout<<"\t-> (3) Ice cream [- health]"<<endl;
