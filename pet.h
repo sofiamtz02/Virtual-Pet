@@ -51,12 +51,12 @@ public:
   void exit();
   bool Alive();
   void lowStatus();
-  void thread_time();
   void next_Day();
 
   int getHunger() { return hunger;}
   int getHealth() { return health; }
   int getFun() { return attention; }
+  int getMaxStatus() { return maxStatus; }
 
   void setHunger(int x) {
     if (x <= 20)  hunger = x;
@@ -105,16 +105,16 @@ void Animal::MostrartxtPet() {
 		cout<<i<< endl;
 	archivo.close();  
 } 
-void Animal::PrintFeed() {
+void Animal::PrintFeed() { 
   ifstream archivo(this->fileFeed);
     string texto;
     archivo.open(fileFeed, ios::in);  
-    if(archivo.fail()){ cout<<"El archivo no se puede abrir"<<endl; }
+    if(archivo.fail()){ cout<<"El archivo no se puede abrir"<<endl; } //exception
     while (!archivo.eof()){ 
         getline(archivo,texto);
         cout<<texto<<endl;
     }
-    archivo.close();
+    archivo.close(); 
 } 
 void Animal::PrintFood() { 
   vector<string> renglon;
@@ -176,31 +176,30 @@ void Animal::adoptPet(){
 void Animal::feedPet(){
   if(hunger>=maxStatus){
     hunger = maxStatus; 
-    cout<<"╔═.♥.══════════════╗"<<endl;
-    cout<<"\t"<<this->Name<<" is full"<<endl;
-    cout<<"╚══════════════.♥.═╝"<<endl;
+    cout<<"╔═.♥.════════════════╗"<<endl;
+    cout<<"  "<<this->Name<<" is full"<<endl;
+    cout<<"╚════════════════.♥.═╝"<<endl;
   } else if (hunger < maxStatus && hunger > 0){
     cout<<"╔═.♥.══════════════════════╗"<<endl;
-    cout<<"\t"<<this->Name<<" has been fed"<<endl;
+    cout<<"  "<<this->Name<<" has been fed"<<endl;
     cout<<"╚══════════════════════.♥.═╝";
 
   } else {
     cout<<"not possible to feed pet"<<endl;
   }
-  cout<<hunger<<endl;
 }
 void Animal::playPet(){
   attention +=1;
   hunger -=1;
   if(attention>=maxStatus){
     attention = maxStatus;
-    cout<<"╔. ■ .═══════════════════════════════════════╗"<<endl;
-    cout<<"\t"<<this->Name<<" is tired, come play later. "<<endl;
+    cout<<"\n╔. ■ .═══════════════════════════════════════╗"<<endl;
+    cout<<"   "<<this->Name<<" is tired, come play later. "<<endl;
     cout<<"╚══════════════════════════════════════. ■ .═╝";
 
   } else if (attention < maxStatus && attention > 0){
     cout<<"╔. ■ .════════════════════════════╗"<<endl;
-    cout<<"\t"<<this->Name<<" is happy to play."<<endl;
+    cout<<"   "<<this->Name<<" is happy to play."<<endl;
     cout<<"╚═══════════════════════════. ■ .═╝";
   } else {
     cout<<this-> Name<< " has died"<<endl;
@@ -230,28 +229,28 @@ void Animal::menuFeed(){
   cout<<"\t-> Choose one of the follwoing options to feed pet <-"<<endl;
   cout<<"\t-> (1) Treats"<<endl;
   cout<<"\t-> (2) Kibbles"<<endl;
-  cout<<"\t-> (3) Ice cream (reduces health)"<<endl;
-  cout<<"\t-> (4) Medicin (add health)"<<endl;
+  cout<<"\t-> (3) Ice cream [- health]"<<endl;
+  cout<<"\t-> (4) Medicin [+ health]"<<endl;
   int x; cin>>x; 
 
   switch(x){
     case 1: 
-      cout<<"["<<Name<<" loved the treats]\n"<<endl; 
+      cout<<"ˏˋ°•*⁀➷ ["<<Name<<" loved the treats]\n"<<endl; 
       hunger += 1;
       
       break;
     case 2: 
-      cout<<"["<<Name<<" loved the kibblse]\n"<<endl; 
+      cout<<"ˏˋ°•*⁀➷ ["<<Name<<" loved the kibbles]\n"<<endl; 
        hunger += 2;
 
       break;
     case 3:
-      cout<<"["<<Name<<" loved the desert]\n"<<endl; 
+      cout<<"ˏˋ°•*⁀➷ ["<<Name<<" loved the desert]\n"<<endl; 
       hunger += 1;
       health -=1;
       break;
     case 4:
-      cout<<"["<<Name<<" thought the medicin tasted bitter]\n"<<endl; 
+      cout<<"ˏˋ°•*⁀➷ ["<<Name<<" thought the medicin tasted bitter]\n"<<endl; 
       health +=1;
       break;
   }
@@ -262,20 +261,9 @@ void Animal::menuFeed(){
 void Animal::next_Day(){
   srand(time(0));
 	setAge(getAge() + 1); //increment age
-	setHunger(getHunger() - (rand() % 3) - 1); //decrement belly (randomly between 1 and 3)
-	setHealth(getHealth() - (rand() % 2) - 1); //randomly increment/decrement health
-  setFun(getFun() - (rand() % 3) - 1); //randomly increment/decrement health
-}
-
-/*
-void wait(float seconds){
-	clock_t endwait;
-	endwait = clock() + seconds * CLOCKS_PER_SEC;
-	while (clock() < endwait) {}
-}
-
-void Animal::thread_time(){
-
-}*/
+	setHunger(getHunger() - (rand() % 3)-1 ); 
+	setHealth(getHealth() - (rand() % 1)-1 ); 
+  setFun(getFun() - (rand() % 3)-1 ); 
+} 
 
 #endif 

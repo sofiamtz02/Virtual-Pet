@@ -5,19 +5,16 @@
 #include <chrono>
 #include <unistd.h>
 
-
 #include "pet.h"
 #include "Gato.h"
 #include "Perro.h"
 #include "Rock.h"
 
 using namespace std;
-// //Agregar threadTime, pa 
 
 Animal *vPet = NULL;
 int edad = 0;
 class Animal tama;
-//class Animal vTama;
 
 void clrscr(){
   cout<<"\033[2J\033[1;1H";
@@ -39,18 +36,21 @@ void pixelArt(string nombre){
 
 void *age_function(void *args){
     for(;;){ 
-      this_thread::sleep_for (chrono::seconds(20));
-      //tama.lowStatus();
+      this_thread::sleep_for (chrono::seconds(10));
       tama.next_Day();
-      cout<<"---> Pet has aged a day"<<endl;
+      cout<<"╰┈➤ "<<tama.getName()<<" has aged a day"<<endl;
       
       bool Vivo = tama.Alive();
       if(!Vivo){ // If dead
           clrscr(); pixelArt("RIP.txt");
-    			cout << "R.I.P. Your Pet died"<<endl;
+          if(tama.getFun()<=0){ cout << "R.I.P. Your Pet died of boredom"<<endl; }
+          else if(tama.getHealth()<=0) {cout << "R.I.P. Your Pet died of sickness"<<endl;}
+          else if(tama.getHunger()<=0) {cout << "R.I.P. Your Pet died of hunger"<<endl;}
+          else cout << "R.I.P. Your Pet died"<<endl;
           cout << tama.getName() <<" lived "<<tama.getAge() <<" days"<<endl;
           cout << "Better luck next time!"<<endl;  
-          cout << "** insert character and enter to exit"<<endl;                  
+          string x;
+          getline(cin,x);
     			return 0;
           break;
     	}
@@ -61,11 +61,14 @@ void *age_function(void *args){
 pthread_t thread1;
 
 int main() {
+  try{
   int petT,x;
   string petName;
   tama.adoptPet();
 
-  cin >>petT; 
+  cin >>petT;
+  string s;
+ 
   cout << endl;
 
     if (petT == 1) {
@@ -78,8 +81,10 @@ int main() {
         cout << "Congratulations, you've adopted a rock!\n" << endl;
         vPet = new vRock();
     }
+    getline(cin,s);
   cout << "What would you like to name your pet?" << endl;
-  cin>>petName;
+    getline(cin,petName);
+
   tama.setName(petName);  
   vPet->MostrartxtPet();
   tama.menuDisplay();
@@ -90,32 +95,41 @@ int main() {
          bool vivo = tama.Alive();
          if(!vivo){ // If dead
           clrscr(); pixelArt("RIP.txt");
-    			cout << "R.I.P. Your Pet died"<<endl;
-          cout << tama.getName() <<" lived "<<tama.getAge() <<" days"<<endl;
+          if(tama.getFun()<=0){ cout << "R.I.P. Your Pet died of boredom"<<endl; }
+          else if(tama.getHealth()<=0) {cout << "R.I.P. Your Pet died of sickness"<<endl;}
+          else if(tama.getHunger()<=0) {cout << "R.I.P. Your Pet died of hunger"<<endl;}
+          else cout << "R.I.P. Your Pet died"<<endl;
+          if(tama.getAge()==0){
+            cout << tama.getName() <<" didn't get to live much with "<<tama.getAge() <<" days"<<endl;
+          } else if(tama.getAge()==1){ cout << tama.getName() <<" lived "<<tama.getAge() <<" day"<<endl;
+          } else  cout << tama.getName() <<" lived "<<tama.getAge() <<" days"<<endl;
           cout << "Better luck next time!"<<endl;          
     			return 0;
     		}
         
         cin>>x;
         switch(x) { 
-            case 1: clrscr(); cout<<"1.Feed\n\n"; 
+            case 1: clrscr();// cout<<"1.Feed\n\n"; 
               tama.menuFeed(); 
-              vPet->PrintFood();
+              if(tama.getHunger()>=tama.getMaxStatus()){
+                vPet->MostrartxtPet();
+              } else { vPet->PrintFood(); }
               tama.feedPet(); 
               tama.lowStatus();
               tama.menuDisplay(); 
               break;
           
-            case 2: clrscr(); cout<<"2.PLay\n"; 
-              vPet->PrintAttention();
+            case 2: clrscr(); //cout<<"2.PLay\n"; 
+              if(tama.getFun()>=tama.getMaxStatus()){
+                    vPet->MostrartxtPet();
+                } else vPet->PrintAttention();
               tama.playPet();  
               tama.lowStatus();
               tama.menuDisplay(); 
               break;
 
-            case 3: clrscr(); cout<<"3. Status\n"; 
+            case 3: clrscr(); //cout<<"3. Status\n"; 
               pixelArt("status.txt");
-                //tama.next_Day();
               tama.status();
               tama.lowStatus();
               tama.menuDisplay(); 
@@ -131,7 +145,9 @@ int main() {
   
       } while (x != 4 || tama.Alive() == 0);
       
-
+  } catch (exception e){
+      cout << "ERROR: Try agian later." << endl;
+  }
     
   return 0;
 }
